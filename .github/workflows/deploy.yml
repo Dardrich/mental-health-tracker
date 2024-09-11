@@ -29,21 +29,16 @@ jobs:
       env:
         PWS_URL: ${{ secrets.PWS_URL }}
       run: |
-          # Check if master branch exists locally or remotely
-          if git show-ref --verify --quiet refs/heads/master; then
-            echo "Master branch already exists locally."
-          else
+          # Check if master branch exists locally
+          if ! git show-ref --verify --quiet refs/heads/master; then
             echo "Creating master branch"
             git branch master
           fi
-
-          # Switch to master branch (this ensures we're on the right branch)
+          
+          # Switch to master branch
           git checkout master
 
-          # Pull the latest changes from the remote master to avoid conflicts
-          git pull $PWS_URL master || echo "Remote master branch doesn't exist yet."
-
-          # Push changes to master branch
+          # Push to master branch and capture the output
           push_output=$(git push $PWS_URL main:master 2>&1)
           if [[ $? -ne 0 ]]; then
             echo "Push failed with output: $push_output"
