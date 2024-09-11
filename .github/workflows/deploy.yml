@@ -34,7 +34,7 @@ jobs:
             echo "Master branch already exists locally."
           else
             echo "Creating master branch"
-            git checkout -b master
+            git branch master
           fi
 
           # Switch to master branch (this ensures we're on the right branch)
